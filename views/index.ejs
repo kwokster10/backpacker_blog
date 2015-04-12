@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Backpackers</title>
+</head>
+<body>
+	<h1> Meet Our Backpackers </h1>
+	<ul>
+	<% Object.keys(backpackers).forEach(function(key) { %>
+		<li><a href="/backpackers/<%= backpackers[key].id %>"> <%= backpackers[key].name %></a></li>
+	<% }) %>
+	<ul>
+	<br>
+	<a href="/backpacker/new">Are you a globetrotter? Join us!</a>
+</body>
+</html>

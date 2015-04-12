@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Joining</title>
+</head>
+<body>
+	<h1>Welcome Globetrotter</h1>
+	<h2>Let's set up your profile page!</h2>
+	<form action="/backpackers" method="POST">
+	<label>Name you'd like displayed on your page</label><br>
+	<input type="text" name="name" placeholder="name to be displayed" required><br>
+	<label>A nice, small picture of you. Must be a URL.</label><br>
+	<input type="text" name="image" value="http://romston.com/wp-posts/12-03-22-Tilting_head/Tilting_head_Img01.jpg" placeholder="url of jpg, png, tif"><br>
+	<label>What color or picture would you like in the backgrond?</label>
+	<input type="text" name="background" value="white" placeholder="color or url of image"><br>
+	<br>
+	Now give us a little bio about yourself<br>
+	<textarea name="info" rows=3 cols=30>
+		something short and sweet
+	</textarea> 
+	<br>
+	<button>Submit</button>
+	</form> 
+</body>
+</html>
