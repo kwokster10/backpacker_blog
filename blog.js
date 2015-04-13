@@ -15,14 +15,11 @@ var sqlite3 = require("sqlite3").verbose();
 // setting the database to store and get information
 var db = new sqlite3.Database("blog.db");
 
-var pic_default = "http://30.media.tumblr.com/tumblr_kyhg91fBOQ1qzlucko1_500.jpg";
-var background_default = "http://www.aamrofreight.net/wp-content/uploads/2014/06/White-Background-Wallpapers-HD.jpg";
-
 // creating the tables sequentially in the js rather than have sep schema and seed files
 db.serialize(function() {
 	db.run("CREATE TABLE IF NOT EXISTS backpackers (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, password TEXT, image TEXT, background TEXT, info TEXT);");
-	db.run("CREATE TABLE IF NOT EXISTS posts (p_id INTEGER PRIMARY KEY, p_body TEXT, p_image TEXT, b_id INTEGER); CREATE TRIGGER timestamp_update BEFORE UPDATE ON posts BEGIN UPDATE posts SET updated_at = CURRENT_TIMESTAMP WHERE id = new.id;");
-	db.run("CREATE TABLE IF NOT EXISTS comments (c_id INTEGER PRIMARY KEY, c_name TEXT, c_body TEXT, p_id INTEGER); CREATE TRIGGER timestamp_update BEFORE UPDATE ON comments BEGIN UPDATE comments SET updated_at = CURRENT_TIMESTAMP WHERE id = new.id;");
+	db.run("CREATE TABLE IF NOT EXISTS posts (p_id INTEGER PRIMARY KEY, p_title TEXT, p_image TEXT, p_body TEXT, b_id INTEGER, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP); CREATE TRIGGER timestamp_update BEFORE UPDATE ON posts BEGIN UPDATE posts SET updated_at = CURRENT_TIMESTAMP WHERE id = new.id; END;");
+	db.run("CREATE TABLE IF NOT EXISTS comments (c_id INTEGER PRIMARY KEY, c_name TEXT, c_body TEXT, p_id INTEGER, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP); CREATE TRIGGER timestamp_update BEFORE UPDATE ON comments BEGIN UPDATE comments SET updated_at = CURRENT_TIMESTAMP WHERE id = new.id; END;");
 });
 
 // redirecting to my main page
@@ -42,13 +39,41 @@ app.get("/backpacker/new", function(req, res) {
 	res.render("new.ejs");
 });
 
+// form to make posts
+app.get("/backpacker/:id/posts/new", function(req, res) {
+	var b_id = parseInt(req.params.id);
+	db.get("SELECT * FROM backpackers WHERE id ="+b_id, function(err, rows) {
+		res.render("new_post.ejs", {backpacker: rows})
+	});
+});
+
+// to add a post 
+app.post("/backpacker/:id/posts", function(req, res) {
+	var b_id = parseInt(req.params.id);
+	db.get("SELECT * FROM backpackers WHERE id ="+b_id, function(err, rows) {
+		db.run("INSERT INTO posts (p_title, p_image, p_body, b_id) VALUES (?, ?, ?, ?);", req.body.title, req.body.p_image, req.body.p_body, b_id, function (err) {
+			if (err) {
+				throw err;
+			} else {
+				res.redirect("/backpacker/:id/posts");
+			}
+		});
+	});
+});
+
+// all posts of one backpacker
+app.get("/backpacker/:id/posts", function(req, res){
+	db.all("SELECT * FROM backpackers;", function(err, rows){
+		res.render("index.ejs", {backpackers : rows});
+	});
+});
+
 // creating new backpacker
 app.post("/backpackers", function(req, res) {
 	db.run("INSERT INTO backpackers (name, password, image, background, info) VALUES (?, ?, ?, ?, ?);", req.body.name, req.body.password, req.body.image, req.body.background, req.body.info, function(err) {
 		if (err) {
 			throw err;
 		} else {
-			console.log(req.body);
 			res.redirect("/backpackers");
 		}
 	});
@@ -58,7 +83,6 @@ app.post("/backpackers", function(req, res) {
 app.get("/backpacker/:id", function(req, res) {
 	var b_id = parseInt(req.params.id);
 	db.get("SELECT * FROM backpackers WHERE id ="+b_id, function(err, rows) {
-		console.log(rows);
 		res.render("show.ejs", {backpacker: rows});
 	});
 });

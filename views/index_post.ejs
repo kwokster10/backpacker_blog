@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<style>
+	header {
+		background: url('<%= backpacker.background %>');
+		background-size: cover;
+		background-position: center;
+		text-align: center;
+		opacity: 0.8;
+	}
+	img.round {
+	border: 1px solid white;
+	border-radius: 70px;
+	}
+	p {
+		text-align: center;
+	}
+	img {
+		position: center;
+	}
+	li {
+		display: block;
+	}
+	</style>
+</head>
+<body>
+	<header>
+		<h1><%= backpacker.name %></h1>
+		<img src="<%= backpacker.image %>" width="150" height="150" class="round"/>
+	</header>
+	<ul>
+	<% Object.keys(posts).forEach(function(key) { %>
+		<img src="<%= posts[key].image %>" width="auto" height="300px"/>
+		<li><a href="/backpacker/<%= backpacker.id %>/post/<%= posts[key].p_id %>"> <%= posts[key].title %></a></li><br>
+	<% }) %>
+	<ul>
+</body>
+</html>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Make a Post</title>
+</head>
+<body>
+	<h1>Create a post <%= backpacker.name %>!</h1>
+	<h3>Think of this as your instablog. Tell us about your travels with a pic worth a thousand words and a short passage to make everyone jealous.</h3>
+	<form action="/backpacker/<%= backpacker.id %>/posts" method="POST">
+	<label>Title of your post</label><br>
+	<input type="text" name="title" placeholder="title" required><br>
+	<br>
+	<label>$1000 picture</label><br>
+	<input type="text" name="p_image" placeholder="url of jpg, tif, png" required><br>
+	<br>
+	Tell us about the image<br>
+	<textarea name="p_body" rows=5 cols=50 required></textarea> 
+	<br>
+	<button>Submit</button>
+	</form> 
+</body>
+</html>
