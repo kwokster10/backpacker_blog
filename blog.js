@@ -68,6 +68,16 @@ app.get("/backpacker/:id/edit", function(req, res) {
 	});
 });
 
+app.put("/backpacker/:id", function(req, res) {
+	var b_id = parseInt(req.params.id);
+	db.run("UPDATE backpackers SET name = ?, password = ?, image = ?, background = ?, info = ? WHERE id ="+b_id, req.body.name, req.body.password, req.body.image, req.body.background, req.body.info, function(err) {
+		if (err) {
+			throw err;
+		} else {
+			res.redirect("/backpacker/"+b_id);
+		}
+	});
+});
 
 
 

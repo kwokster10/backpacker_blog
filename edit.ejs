@@ -3,9 +3,35 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Editing</title>
+	<style> 
+		body {
+		text-align: center;
+		}
+	</style>
 </head>
 <body>
-	
-	
+	<h1>Hello <%= backpacker.name %></h1>
+	<h3>Edit your info here</h3>
+	<form action="/backpacker/<%= backpacker.id %>?_method=PUT" method="POST">
+	<label>Name you'd like displayed on your page</label><br>
+	<input type="text" name="name" value="<%= backpacker.name %>" required><br>
+	<br>
+	Your case-sensitive password<br>
+	<input type="password" name="password" placeholder="case-sensitive" required><br>
+	<br>
+	<label>A nice, square picture of you. Must be a URL.</label><br>
+	<input type="text" name="image" value="<%= backpacker.image %>" ><br>
+	<br>
+	<label>What image would you like as your backgound cover?</label><br>
+	<input type="text" name="background" value="<%= backpacker.background %>" ><br>
+	<br>
+	Now give us a little bio about yourself<br>
+	<textarea name="info" rows=3 cols=30 required><%= backpacker.info %>
+	</textarea> 
+	<br>
+	<button>Submit</button>
+	</form> 
+	<br>
+	<a href="/backpackers">Back to list of globetrotters</a>
 </body>
 </html>
