@@ -7,6 +7,9 @@ app.set("view_engine", "ejs");
 // need this to read body of req
 var bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({extended: false}));
+// need this for put and delete
+var metOverride = require("method-override");
+app.use(metOverride("_method"));
 
 var sqlite3 = require("sqlite3").verbose();
 // setting the database to store and get information
@@ -64,22 +67,33 @@ app.get("/backpacker/:id", function(req, res) {
 app.get("/backpacker/:id/edit", function(req, res) {
 	var b_id = parseInt(req.params.id);
 	db.get("SELECT * FROM backpackers WHERE id="+b_id, function(err, rows) {
-		res.render("edit.ejs", {backpacker : rows});
+			res.render("edit.ejs", {backpacker : rows});
 	});
 });
 
+// to edit a backpacker and update the database
 app.put("/backpacker/:id", function(req, res) {
 	var b_id = parseInt(req.params.id);
 	db.run("UPDATE backpackers SET name = ?, password = ?, image = ?, background = ?, info = ? WHERE id ="+b_id, req.body.name, req.body.password, req.body.image, req.body.background, req.body.info, function(err) {
 		if (err) {
 			throw err;
 		} else {
-			res.redirect("/backpacker/"+b_id);
+			res.redirect("/backpackers");
 		}
 	});
 });
 
-
+// to delete a backpacker
+app.delete("/backpacker/:id", function(req, res) {
+	var b_id = parseInt(req.params.id);
+	db.run("DELETE FROM backpackers WHERE id ="+b_id, function(err) {
+		if (err) {
+			throw err;
+		} else {
+			res.redirect("/backpackers");
+		}
+	});
+});
 
 // listening on port 3000
 app.listen(3000);

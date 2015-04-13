@@ -7,15 +7,24 @@
 		body {
 		text-align: center;
 		}
+		li {
+			display: block;
+		}
+		img.round {
+		border: 1px solid white;
+		border-radius: 70px;
+		}
 	</style>
 </head>
 <body>
 	<h1> Meet Our Backpackers </h1>
 	<ul>
 	<% Object.keys(backpackers).forEach(function(key) { %>
-		<li><a href="/backpacker/<%= backpackers[key].id %>"> <%= backpackers[key].name %></a></li>
+		<img src="<%= backpackers[key].image %>" width="90" height="90" class="round"/>
+		<li><a href="/backpacker/<%= backpackers[key].id %>"> <%= backpackers[key].name %></a></li><br>
 	<% }) %>
 	<ul>
+	<br>
 	<br>
 	<a href="/backpacker/new">Are you a globetrotter? Join us!</a>
 </body>
