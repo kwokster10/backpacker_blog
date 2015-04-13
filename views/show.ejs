@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>About You</title>
+	<style>
+	div.background {
+		background: url("<%= backpacker.background %>");
+		background-size: cover;
+		background-position: center;
+		opacity: 0.6;
+	}
+	div.my_header {
+		text-align: center;
+		position: center;
+		}
+	p {
+		text-align: center;
+	}
+	</style>
+</head>
+<body>
+	<header>
+		<div class="background"></div>
+		<div class="my_header">
+			<h1><%= backpacker.name %></h1>
+			<img src="<%= backpacker.image %>" width="100" height="100" style="padding:10px;" border-radius="50%" />
+		</div>
+	</header>
+	<p>
+		<%= backpacker.info %>
+	<br>
+	<br>
+	<a href="/backpacker/<%= backpacker.id %>/edit"><%= backpacker.name%>? Edit your page here</a>
+	<br>
+	<a href="/backpackers">Back to list of globetrotters</a>
+	</p>
+</body>
+</html>
+
+

@@ -10,14 +10,18 @@
 	<form action="/backpackers" method="POST">
 	<label>Name you'd like displayed on your page</label><br>
 	<input type="text" name="name" placeholder="name to be displayed" required><br>
-	<label>A nice, small picture of you. Must be a URL.</label><br>
-	<input type="text" name="image" value="http://romston.com/wp-posts/12-03-22-Tilting_head/Tilting_head_Img01.jpg" placeholder="url of jpg, png, tif"><br>
-	<label>What color or picture would you like in the backgrond?</label>
-	<input type="text" name="background" value="white" placeholder="color or url of image"><br>
+	<br>
+	Your case-sensitive password<br>
+	<input type="password" name="password" placeholder="case-sensitive" required><br>
+	<br>
+	<label>A nice, square picture of you. Must be a URL. If you don't want to find a picture now, leave the default link in the box.</label><br>
+	<input type="text" name="image" value="http://30.media.tumblr.com/tumblr_kyhg91fBOQ1qzlucko1_500.jpg" required><br>
+	<br>
+	<label>What image would you like as your backgound cover? If you don't want to find a picture now, leave the default link in the box.</label><br>
+	<input type="text" name="background" value="http://www.aamrofreight.net/wp-content/uploads/2014/06/White-Background-Wallpapers-HD.jpg" required><br>
 	<br>
 	Now give us a little bio about yourself<br>
-	<textarea name="info" rows=3 cols=30>
-		something short and sweet
+	<textarea name="info" rows=3 cols=30 required>something short and sweet
 	</textarea> 
 	<br>
 	<button>Submit</button>

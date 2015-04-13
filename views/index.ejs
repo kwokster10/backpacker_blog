@@ -8,7 +8,7 @@
 	<h1> Meet Our Backpackers </h1>
 	<ul>
 	<% Object.keys(backpackers).forEach(function(key) { %>
-		<li><a href="/backpackers/<%= backpackers[key].id %>"> <%= backpackers[key].name %></a></li>
+		<li><a href="/backpacker/<%= backpackers[key].id %>"> <%= backpackers[key].name %></a></li>
 	<% }) %>
 	<ul>
 	<br>
