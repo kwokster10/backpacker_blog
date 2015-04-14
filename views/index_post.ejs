@@ -38,6 +38,7 @@
 		<li>
 		<a href="/backpacker/<%= backpacker.id %>/post/<%= posts[i].p_id %>"> <%= posts[i].p_title %></a><br>
 		<img src="<%= posts[i].p_image %>" width="auto" height="120px"/><br>
+		Date of post: <%= posts[i].updated_at %>
 		</li><br>
 	<% } %>
 	</ul>

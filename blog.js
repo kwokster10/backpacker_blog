@@ -39,38 +39,30 @@ app.get("/backpacker/new", function(req, res) {
 	res.render("new.ejs");
 });
 
+// creating new backpacker
+app.post("/backpackers", function(req, res) {
+	db.run("INSERT INTO backpackers (name, password, image, background, info) VALUES (?, ?, ?, ?, ?);", req.body.name, req.body.password, req.body.image, req.body.background, req.body.info, function(err) {
+		if (err) {
+			throw err;
+		} else {
+			res.redirect("/backpackers");
+		}
+	});
+});
+
+// each backpacker page
+app.get("/backpacker/:id", function(req, res) {
+	var b_id = parseInt(req.params.id);
+	db.get("SELECT * FROM backpackers WHERE id ="+b_id+";", function(err, rows) {
+		res.render("show.ejs", {backpacker: rows});
+	});
+});
+
 // form to make posts
 app.get("/backpacker/:id/posts/new", function(req, res) {
 	var b_id = parseInt(req.params.id);
 	db.get("SELECT * FROM backpackers WHERE id ="+b_id+";", function(err, rows) {
 		res.render("new_post.ejs", {backpacker: rows})
-	});
-});
-
-// adding comments
-app.post("/backpacker/:id/post/:p_id/comments", function(req, res) {
-	var b_id = parseInt(req.params.id);
-	var p_id = parseInt(req.params.p_id);
-	db.run("INSERT INTO comments (c_name, c_body, p_id) VALUES (?, ?, ?);", req.body.c_name, req.body.c_body, p_id, function(err) {
-		if (err) {
-			throw err;
-		} else {
-			res.redirect("/backpacker/"+b_id+"/post/"+p_id);
-		}
-	});
-});
-
-// to delete a comment
-app.delete("/backpacker/:id/post/:p_id/comment/:c_id", function(req, res) {
-	var b_id = parseInt(req.params.id);
-	var p_id = parseInt(req.params.p_id);
-	var c_id = parseInt(req.params.c_id);
-	db.run("DELETE FROM comments WHERE c_id ="+c_id+";", function(err) {
-		if (err) {
-			throw err;
-		} else {
-			res.redirect("/backpacker/"+b_id+"/post/"+p_id);
-		}
 	});
 });
 
@@ -98,22 +90,30 @@ app.get("/backpacker/:id/posts", function(req, res){
 	});
 });
 
-// creating new backpacker
-app.post("/backpackers", function(req, res) {
-	db.run("INSERT INTO backpackers (name, password, image, background, info) VALUES (?, ?, ?, ?, ?);", req.body.name, req.body.password, req.body.image, req.body.background, req.body.info, function(err) {
+// adding comments
+app.post("/backpacker/:id/post/:p_id/comments", function(req, res) {
+	var b_id = parseInt(req.params.id);
+	var p_id = parseInt(req.params.p_id);
+	db.run("INSERT INTO comments (c_name, c_body, p_id) VALUES (?, ?, ?);", req.body.c_name, req.body.c_body, p_id, function(err) {
 		if (err) {
 			throw err;
 		} else {
-			res.redirect("/backpackers");
+			res.redirect("/backpacker/"+b_id+"/post/"+p_id);
 		}
 	});
 });
 
-// each backpacker page
-app.get("/backpacker/:id", function(req, res) {
+// to delete a comment
+app.delete("/backpacker/:id/post/:p_id/comment/:c_id", function(req, res) {
 	var b_id = parseInt(req.params.id);
-	db.get("SELECT * FROM backpackers WHERE id ="+b_id+";", function(err, rows) {
-		res.render("show.ejs", {backpacker: rows});
+	var p_id = parseInt(req.params.p_id);
+	var c_id = parseInt(req.params.c_id);
+	db.run("DELETE FROM comments WHERE c_id ="+c_id+";", function(err) {
+		if (err) {
+			throw err;
+		} else {
+			res.redirect("/backpacker/"+b_id+"/post/"+p_id);
+		}
 	});
 });
 
@@ -200,6 +200,14 @@ app.delete("/backpacker/:id/post/:p_id", function(req, res) {
 			res.redirect("/backpacker/"+b_id+"/posts");
 		}
 	});
+});
+
+app.get("/:somethingelse", function(req, res) {
+	res.redirect("/backpackers");
+});
+
+app.get("/:somethingelse/:somethingelse", function(req, res) {
+	res.redirect("/backpackers");
 });
 
 // listening on port 3000

@@ -40,17 +40,17 @@
 	<ul>
 	<% for (var i = 0; i < comments.length; i++) { %>
 		<li>
-		<%= comments.c_name %> : <%= comments.c_body %>
+		On <%= comments[i].created_at %> <%= comments[i].c_name %> said: <%= comments[i].c_body %>
 		</li><br>
-		<form method="POST" action="/backpacker/<%= backpacker.id %>/post/<%= post.p_id %>/comment/<%= comments.c_id %>?_method=DELETE">
-		<button>Delete this post</button>
+		<form method="POST" action="/backpacker/<%= backpacker.id %>/post/<%= post.p_id %>/comment/<%= comments[i].c_id %>?_method=DELETE">
+		<button>Delete this comment</button>
 	</form>
 	<% } %>
 	</ul>
 	<br><br>
 	<label>Leave a nice comment:</label><br>
 	<form action="/backpacker/<%= backpacker.id %>/post/<%= post.p_id %>/comments" method="POST">
-	<input type="text" name="c_name" placeholder="your name"><br>
+	<input type="text" name="c_name" placeholder="your name" required><br>
 	<br>
 	<textarea name="c_body" rows=3 cols=50 required></textarea> 
 	<br>
