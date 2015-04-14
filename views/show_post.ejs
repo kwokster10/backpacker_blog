@@ -17,7 +17,7 @@
 		text-align: center;
 	}
 	h1 {
-		padding-top: 20px;
+		padding-top: 30px;
 	}
 	img {
 		position: center;
@@ -42,11 +42,14 @@
 		<li>
 		<%= comments.c_name %> : <%= comments.c_body %>
 		</li><br>
+		<form method="POST" action="/backpacker/<%= backpacker.id %>/post/<%= post.p_id %>/comment/<%= comments.c_id %>?_method=DELETE">
+		<button>Delete this post</button>
+	</form>
 	<% } %>
 	</ul>
 	<br><br>
 	<label>Leave a nice comment:</label><br>
-	<form action="/backpacker/<%= backpacker.id %>/post/post.p_id" method="POST">
+	<form action="/backpacker/<%= backpacker.id %>/post/<%= post.p_id %>/comments" method="POST">
 	<input type="text" name="c_name" placeholder="your name"><br>
 	<br>
 	<textarea name="c_body" rows=3 cols=50 required></textarea> 

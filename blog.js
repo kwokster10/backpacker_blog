@@ -47,16 +47,31 @@ app.get("/backpacker/:id/posts/new", function(req, res) {
 	});
 });
 
+// adding comments
 app.post("/backpacker/:id/post/:p_id/comments", function(req, res) {
 	var b_id = parseInt(req.params.id);
 	var p_id = parseInt(req.params.p_id);
-	db.run("INSERT INTO comments (c_name, c_body, p_id) VALUES (?, ?, ?);", req.body.c_name, req.body.c_body, p_id, function (err) {
-			if (err) {
-				throw err;
-			} else {
-				res.redirect("/backpacker/"+b_id+"/post/"+p_id);
-			}
-		});
+	db.run("INSERT INTO comments (c_name, c_body, p_id) VALUES (?, ?, ?);", req.body.c_name, req.body.c_body, p_id, function(err) {
+		if (err) {
+			throw err;
+		} else {
+			res.redirect("/backpacker/"+b_id+"/post/"+p_id);
+		}
+	});
+});
+
+// to delete a comment
+app.delete("/backpacker/:id/post/:p_id/comment/:c_id", function(req, res) {
+	var b_id = parseInt(req.params.id);
+	var p_id = parseInt(req.params.p_id);
+	var c_id = parseInt(req.params.c_id);
+	db.run("DELETE FROM comments WHERE c_id ="+c_id+";", function(err) {
+		if (err) {
+			throw err;
+		} else {
+			res.redirect("/backpacker/"+b_id+"/post/"+p_id);
+		}
+	});
 });
 
 // to add a post 
@@ -78,8 +93,6 @@ app.get("/backpacker/:id/posts", function(req, res){
 	var b_id = parseInt(req.params.id);
 	db.get("SELECT * FROM backpackers WHERE id ="+b_id+";", function(err, rows){
 		db.all("SELECT * FROM posts WHERE b_id ="+b_id+";", function(err, rows2) {
-			console.log(rows);
-			console.log(rows2);
 			res.render("index_post.ejs", {backpacker : rows, posts : rows2});
 		});
 	});
@@ -110,7 +123,8 @@ app.get("/backpacker/:id/post/:p_id", function(req, res) {
 	var p_id = parseInt(req.params.p_id);
 	db.get("SELECT * FROM backpackers WHERE id ="+b_id+";", function(err, rows){
 		db.get("SELECT * FROM posts WHERE p_id = "+p_id+";", function(err, rows2) {
-			db.all("SELECT * FROM comments WHERE p_id ="+p_id+";" function(err, rows3) {
+			db.all("SELECT * FROM comments WHERE p_id ="+p_id+";", function(err, rows3) {
+				console.log(rows3);
 				res.render("show_post.ejs", {backpacker : rows, post : rows2, comments: rows3});
 			});
 		});
