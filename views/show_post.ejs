@@ -13,28 +13,43 @@
 	border: 1px solid white;
 	border-radius: 70px;
 	}
-	p {
+	body {
 		text-align: center;
+	}
+	h1 {
+		padding-top: 20px;
 	}
 	img {
 		position: center;
 	}
-	li {
-		display: block;
-	}
 	</style>
 </head>
+<header>
+	<h1><%= backpacker.name %></h1>
+	<img src="<%= backpacker.image %>" width="120" height="120" class="round"/>
+</header>
 <body>
-	<header>
-		<h1><%= backpacker.name %></h1>
-		<img src="<%= backpacker.image %>" width="150" height="150" class="round"/>
-	</header>
-	<ul>
-	<% Object.keys(posts).forEach(function(key) { %>
-		<img src="<%= posts[key].image %>" width="auto" height="300px"/>
-		<li><a href="/backpacker/<%= backpacker.id %>/post/<%= posts[key].p_id %>"> <%= posts[key].title %></a></li><br>
-	<% }) %>
-	<ul>
+	<h3><%= post.p_title %></h3>
+	<p>
+	<img src="<%= post.p_image %>" width="auto" height="300px"/><br>
+	<%= post.p_body %>
+	<br><br>
+	
+	</p>
+	<br>
+	<br>
+	<a href="/backpacker/<%= backpacker.id %>/post/post.p_id/edit"><%= backpacker.name%>? Edit your post</a>
+	<br>
+	<br>
+	<a href="/backpacker/<%= backpacker.id %>/posts">Back to <%= backpacker.name %>'s Posts</a>
+	<br>
+	<br>
+	<a href="/backpackers">Back to list of globetrotters</a>
+	<br>
+	<br>
+	<form method="POST" action="/backpacker/<%= backpacker.id %>/post/<%= post.p_id %>?_method=DELETE">
+		<button>Delete this post</button>
+	</form>
 </body>
 </html>
 

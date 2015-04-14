@@ -42,7 +42,7 @@ app.get("/backpacker/new", function(req, res) {
 // form to make posts
 app.get("/backpacker/:id/posts/new", function(req, res) {
 	var b_id = parseInt(req.params.id);
-	db.get("SELECT * FROM backpackers WHERE id ="+b_id, function(err, rows) {
+	db.get("SELECT * FROM backpackers WHERE id ="+b_id+";", function(err, rows) {
 		res.render("new_post.ejs", {backpacker: rows})
 	});
 });
@@ -50,12 +50,12 @@ app.get("/backpacker/:id/posts/new", function(req, res) {
 // to add a post 
 app.post("/backpacker/:id/posts", function(req, res) {
 	var b_id = parseInt(req.params.id);
-	db.get("SELECT * FROM backpackers WHERE id ="+b_id, function(err, rows) {
+	db.get("SELECT * FROM backpackers WHERE id ="+b_id+";", function(err, rows) {
 		db.run("INSERT INTO posts (p_title, p_image, p_body, b_id) VALUES (?, ?, ?, ?);", req.body.title, req.body.p_image, req.body.p_body, b_id, function (err) {
 			if (err) {
 				throw err;
 			} else {
-				res.redirect("/backpacker/:id/posts");
+				res.redirect("/backpacker/"+b_id+"/posts");
 			}
 		});
 	});
@@ -63,8 +63,13 @@ app.post("/backpacker/:id/posts", function(req, res) {
 
 // all posts of one backpacker
 app.get("/backpacker/:id/posts", function(req, res){
-	db.all("SELECT * FROM backpackers;", function(err, rows){
-		res.render("index.ejs", {backpackers : rows});
+	var b_id = parseInt(req.params.id);
+	db.get("SELECT * FROM backpackers WHERE id ="+b_id+";", function(err, rows){
+		db.all("SELECT * FROM posts WHERE b_id ="+b_id+";", function(err, rows2) {
+			console.log(rows);
+			console.log(rows2);
+			res.render("index_post.ejs", {backpacker : rows, posts : rows2});
+		});
 	});
 });
 
@@ -82,15 +87,26 @@ app.post("/backpackers", function(req, res) {
 // each backpacker page
 app.get("/backpacker/:id", function(req, res) {
 	var b_id = parseInt(req.params.id);
-	db.get("SELECT * FROM backpackers WHERE id ="+b_id, function(err, rows) {
+	db.get("SELECT * FROM backpackers WHERE id ="+b_id+";", function(err, rows) {
 		res.render("show.ejs", {backpacker: rows});
+	});
+});
+
+// each post page
+app.get("/backpacker/:id/post/:p_id", function(req, res) {
+	var b_id = parseInt(req.params.id);
+	var p_id = parseInt(req.params.p_id);
+	db.get("SELECT * FROM backpackers WHERE id ="+b_id+";", function(err, rows){
+		db.get("SELECT * FROM posts WHERE p_id = "+p_id+";", function(err, rows2) {
+			res.render("show_post.ejs", {backpacker : rows, post : rows2});
+		});
 	});
 });
 
 // backpacker edit form
 app.get("/backpacker/:id/edit", function(req, res) {
 	var b_id = parseInt(req.params.id);
-	db.get("SELECT * FROM backpackers WHERE id="+b_id, function(err, rows) {
+	db.get("SELECT * FROM backpackers WHERE id="+b_id+";", function(err, rows) {
 			res.render("edit.ejs", {backpacker : rows});
 	});
 });
@@ -98,7 +114,7 @@ app.get("/backpacker/:id/edit", function(req, res) {
 // to edit a backpacker and update the database
 app.put("/backpacker/:id", function(req, res) {
 	var b_id = parseInt(req.params.id);
-	db.run("UPDATE backpackers SET name = ?, password = ?, image = ?, background = ?, info = ? WHERE id ="+b_id, req.body.name, req.body.password, req.body.image, req.body.background, req.body.info, function(err) {
+	db.run("UPDATE backpackers SET name = ?, password = ?, image = ?, background = ?, info = ? WHERE id ="+b_id+";", req.body.name, req.body.password, req.body.image, req.body.background, req.body.info, function(err) {
 		if (err) {
 			throw err;
 		} else {
@@ -110,11 +126,24 @@ app.put("/backpacker/:id", function(req, res) {
 // to delete a backpacker
 app.delete("/backpacker/:id", function(req, res) {
 	var b_id = parseInt(req.params.id);
-	db.run("DELETE FROM backpackers WHERE id ="+b_id, function(err) {
+	db.run("DELETE FROM backpackers WHERE id ="+b_id+";", function(err) {
 		if (err) {
 			throw err;
 		} else {
 			res.redirect("/backpackers");
+		}
+	});
+});
+
+// to delete a post
+app.delete("/backpacker/:id/post/:p_id", function(req, res) {
+	var b_id = parseInt(req.params.id);
+	var p_id = parseInt(req.params.p_id);
+	db.run("DELETE FROM posts WHERE p_id ="+p_id+";", function(err) {
+		if (err) {
+			throw err;
+		} else {
+			res.redirect("/backpacker/"+b_id+"/posts");
 		}
 	});
 });

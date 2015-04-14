@@ -11,32 +11,33 @@
 		text-align: center;
 		opacity: 0.8;
 	}
+	h1 {
+		padding-top: 20px;
+	}
 	img.round {
 	border: 1px solid white;
 	border-radius: 70px;
 	}
-	p {
-		text-align: center;
-	}
-	form {
+	body {
 		text-align: center;
 	}
 	</style>
 </head>
+<header>
+	<h1><%= backpacker.name %></h1>
+	<img src="<%= backpacker.image %>" width="120" height="120" class="round"/>
+</header>
 <body>
-	<header>
-		<h1><%= backpacker.name %></h1>
-		<img src="<%= backpacker.image %>" width="150" height="150" class="round"/>
-	</header>
 	<p>
 		<%= backpacker.info %>
+	</p>
 	<br>
 	<br>
 	<br>
 	<a href="/backpacker/<%= backpacker.id %>/posts"><%= backpacker.name%>'s Blog Posts</a>
 	<br>
 	<br>
-	<a href="/backpacker/<%= backpacker.id %>/post/new"><%= backpacker.name%>? Make a post!</a>
+	<a href="/backpacker/<%= backpacker.id %>/posts/new"><%= backpacker.name%>? Make a post!</a>
 	<br>
 	<br>
 	<a href="/backpacker/<%= backpacker.id %>/edit"><%= backpacker.name%>? Edit your profile here</a>
@@ -45,7 +46,6 @@
 	<a href="/backpackers">Back to list of globetrotters</a>
 	<br>
 	<br>
-	</p>
 	<form method="POST" action="/backpacker/<%= backpacker.id %>?_method=DELETE">
 		<button>No longer trotting? Remove here</button>
 	</form>
