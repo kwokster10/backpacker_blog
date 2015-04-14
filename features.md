@@ -15,3 +15,10 @@
 5. If you need to add, edit or delete any posts or comments, travel to the respective page and there will be a link or button for those actions towards the bottom of the page. 
 
 6. See, simple and easy. Happy blogging!
+
+### How the app works: 
+
+App 1 --- * Backpacker 1 --- * Post 1 --- * Comments
+
+- * = many
+- 1 = one
