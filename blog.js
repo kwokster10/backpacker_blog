@@ -128,7 +128,6 @@ app.get("/backpacker/:id/post/:p_id", function(req, res) {
 	db.get("SELECT * FROM backpackers WHERE id ="+b_id+";", function(err, rows){
 		db.get("SELECT * FROM posts WHERE p_id = "+p_id+";", function(err, rows2) {
 			db.all("SELECT * FROM comments WHERE p_id ="+p_id+";", function(err, rows3) {
-				console.log(rows3);
 				res.render("show_post.ejs", {backpacker : rows, post : rows2, comments: rows3});
 			});
 		});
@@ -164,9 +163,13 @@ app.get("/backpacker/:id/post/:p_id/edit", function(req, res) {
 	var b_id = parseInt(req.params.id);
 	var p_id = parseInt(req.params.p_id);
 	db.get("SELECT * FROM backpackers WHERE id ="+b_id+";", function(err, rows){
-		db.get("SELECT * FROM posts WHERE p_id = "+p_id+";", function(err, rows2) {
-			res.render("edit_post.ejs", {backpacker : rows, post : rows2});
-		});
+		if (req.query.password_check === rows.password) {
+			db.get("SELECT * FROM posts WHERE p_id = "+p_id+";", function(err, rows2) {
+				res.render("edit_post.ejs", {backpacker : rows, post : rows2});
+			});
+		}else {
+			res.redirect("/backpacker/"+b_id+"/posts");
+		}
 	});
 });
 
@@ -211,14 +214,20 @@ app.delete("/backpacker/:id", function(req, res) {
 app.delete("/backpacker/:id/post/:p_id", function(req, res) {
 	var b_id = parseInt(req.params.id);
 	var p_id = parseInt(req.params.p_id);
-	db.run("DELETE FROM posts WHERE p_id ="+p_id+";", function(err) {
-		db.run("DELETE FROM comments WHERE p_id ="+p_id+";", function(err) {
-			if (err) {
-				throw err;
-			} else {
-				res.redirect("/backpacker/"+b_id+"/posts");
-			}
-		});
+	db.get("SELECT password FROM backpackers WHERE id ="+b_id+";", function(err, rows) {
+		if (req.body.password_check === rows.password) {
+			db.run("DELETE FROM posts WHERE p_id ="+p_id+";", function(err) {
+				db.run("DELETE FROM comments WHERE p_id ="+p_id+";", function(err) {
+					if (err) {
+						throw err;
+					} else {
+						res.redirect("/backpacker/"+b_id+"/posts");
+					}
+				});
+			});
+		} else {
+			res.redirect("/backpacker/"+b_id+"/posts");
+		}
 	});
 });
 

@@ -6,7 +6,7 @@
 
 1. You can add yourself to the main page and it will create your profile. 
 
-2. The password setup ist still a primitive one but you can use to edit your page, make a new post, and to delete your profile and posts. If you entered it incorrectly, it will redirect you to the previous page.
+2. The password setup ist still a primitive one but you can use to edit your page, make a new post, and to delete your profile and posts. If you entered it incorrectly, it will redirect you to an alternate page.
 
 3. After creating your profile, you can begin creating posts. 
 
