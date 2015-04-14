@@ -62,7 +62,11 @@ app.get("/backpacker/:id", function(req, res) {
 app.get("/backpacker/:id/posts/new", function(req, res) {
 	var b_id = parseInt(req.params.id);
 	db.get("SELECT * FROM backpackers WHERE id ="+b_id+";", function(err, rows) {
-		res.render("new_post.ejs", {backpacker: rows})
+		if (req.query.password_check === rows.password) {
+			res.render("new_post.ejs", {backpacker: rows});
+		} else {
+			res.redirect("/backpacker/"+b_id+"/posts");
+		}
 	});
 });
 
@@ -135,7 +139,11 @@ app.get("/backpacker/:id/post/:p_id", function(req, res) {
 app.get("/backpacker/:id/edit", function(req, res) {
 	var b_id = parseInt(req.params.id);
 	db.get("SELECT * FROM backpackers WHERE id="+b_id+";", function(err, rows) {
+		if (req.query.password_check === rows.password) {
 			res.render("edit.ejs", {backpacker : rows});
+		} else {
+			res.redirect("/");
+		}
 	});
 });
 
@@ -177,28 +185,40 @@ app.put("/backpacker/:id/post/:p_id", function(req, res) {
 	});
 });
 
-// to delete a backpacker
+// to delete a backpacker and all the baggage
 app.delete("/backpacker/:id", function(req, res) {
 	var b_id = parseInt(req.params.id);
-	db.run("DELETE FROM backpackers WHERE id ="+b_id+";", function(err) {
-		if (err) {
-			throw err;
+	db.get("SELECT password FROM backpackers WHERE id ="+b_id+";", function(err, rows) {
+		if (req.body.password_check === rows.password) {
+			db.run("DELETE FROM backpackers WHERE id ="+b_id+";", function(err) {
+				db.run("DELETE FROM posts WHERE b_id ="+b_id+";", function(err) {
+					db.run("DELETE FROM comments INNER JOIN posts ON posts.p_id = comments.p_id WHERE posts.b_id="+b_id+";", function(err) {
+						if (err) {
+							throw err;
+						} else {
+							res.redirect("/backpackers");
+						}
+					});
+				});
+			});
 		} else {
 			res.redirect("/backpackers");
 		}
 	});
 });
 
-// to delete a post
+// to delete a post and it's related comments
 app.delete("/backpacker/:id/post/:p_id", function(req, res) {
 	var b_id = parseInt(req.params.id);
 	var p_id = parseInt(req.params.p_id);
 	db.run("DELETE FROM posts WHERE p_id ="+p_id+";", function(err) {
-		if (err) {
-			throw err;
-		} else {
-			res.redirect("/backpacker/"+b_id+"/posts");
-		}
+		db.run("DELETE FROM comments WHERE p_id ="+p_id+";", function(err) {
+			if (err) {
+				throw err;
+			} else {
+				res.redirect("/backpacker/"+b_id+"/posts");
+			}
+		});
 	});
 });
 

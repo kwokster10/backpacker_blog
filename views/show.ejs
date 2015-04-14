@@ -37,18 +37,25 @@
 	<a href="/backpacker/<%= backpacker.id %>/posts"><%= backpacker.name%>'s Blog Posts</a>
 	<br>
 	<br>
-	<a href="/backpacker/<%= backpacker.id %>/posts/new"><%= backpacker.name%>? Make a post!</a>
+	<form action="/backpacker/<%= backpacker.id %>/posts/new" method="GET">
+	<label><%= backpacker.name%>? Enter your password to make a post!</label><br>
+	<input type="password" name="password_check" placeholder="case-sensitive"> <button>Create a post!</button>
+	</form>
 	<br>
 	<br>
-	<a href="/backpacker/<%= backpacker.id %>/edit"><%= backpacker.name%>? Edit your profile here</a>
-	<br>
-	<br>
-	<a href="/backpackers">Back to list of globetrotters</a>
+	<form action="/backpacker/<%= backpacker.id %>/edit" method="GET">
+	<label><%= backpacker.name%>? Enter your password to edit your profile!</label><br>
+	<input type="password" name="password_check" placeholder="case-sensitive"> <button>Edit!</button>
+	</form>
 	<br>
 	<br>
 	<form method="POST" action="/backpacker/<%= backpacker.id %>?_method=DELETE">
+		<input type="password" name="password_check" placeholder="your password">
 		<button>No longer trotting? Remove here</button>
 	</form>
+	<br>
+	<br>
+	<a href="/backpackers">Back to list of globetrotters</a>
 </body>
 </html>
 
