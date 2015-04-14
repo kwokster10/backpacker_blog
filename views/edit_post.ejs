@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Edit a Post</title>
+	<style> 
+		body {
+		text-align: center;
+		}
+	</style>
+</head>
+<body>
+	<h1>Edit your post <%= backpacker.name %>!</h1>
+	<form action="/backpacker/<%= backpacker.id %>/post/<%= post.p_id %>?_method=PUT" method="POST">
+	<label>Title of your post</label><br>
+	<input type="text" name="title" value="<%= post.p_title %>" required><br>
+	<br>
+	<label>$1000 picture</label><br>
+	<input type="text" name="p_image" value="<%= post.p_image %>" required><br>
+	<br>
+	Tell us about the image<br>
+	<textarea name="p_body" rows=5 cols=50 required><%= post.p_body %></textarea> 
+	<br>
+	<button>Submit</button>
+	</form> 
+</body>
+</html>

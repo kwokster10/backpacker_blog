@@ -22,6 +22,9 @@
 	img {
 		position: center;
 	}
+	li {
+		display: block;
+	}
 	</style>
 </head>
 <header>
@@ -34,11 +37,26 @@
 	<img src="<%= post.p_image %>" width="auto" height="300px"/><br>
 	<%= post.p_body %>
 	<br><br>
-	
+	<ul>
+	<% for (var i = 0; i < comments.length; i++) { %>
+		<li>
+		<%= comments.c_name %> : <%= comments.c_body %>
+		</li><br>
+	<% } %>
+	</ul>
+	<br><br>
+	<label>Leave a nice comment:</label><br>
+	<form action="/backpacker/<%= backpacker.id %>/post/post.p_id" method="POST">
+	<input type="text" name="c_name" placeholder="your name"><br>
+	<br>
+	<textarea name="c_body" rows=3 cols=50 required></textarea> 
+	<br>
+	<button>Comment</button>
+	</form>
 	</p>
 	<br>
 	<br>
-	<a href="/backpacker/<%= backpacker.id %>/post/post.p_id/edit"><%= backpacker.name%>? Edit your post</a>
+	<a href="/backpacker/<%= backpacker.id %>/post/<%= post.p_id %>/edit"><%= backpacker.name%>? Edit your post</a>
 	<br>
 	<br>
 	<a href="/backpacker/<%= backpacker.id %>/posts">Back to <%= backpacker.name %>'s Posts</a>

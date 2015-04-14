@@ -47,6 +47,18 @@ app.get("/backpacker/:id/posts/new", function(req, res) {
 	});
 });
 
+app.post("/backpacker/:id/post/:p_id/comments", function(req, res) {
+	var b_id = parseInt(req.params.id);
+	var p_id = parseInt(req.params.p_id);
+	db.run("INSERT INTO comments (c_name, c_body, p_id) VALUES (?, ?, ?);", req.body.c_name, req.body.c_body, p_id, function (err) {
+			if (err) {
+				throw err;
+			} else {
+				res.redirect("/backpacker/"+b_id+"/post/"+p_id);
+			}
+		});
+});
+
 // to add a post 
 app.post("/backpacker/:id/posts", function(req, res) {
 	var b_id = parseInt(req.params.id);
@@ -98,7 +110,9 @@ app.get("/backpacker/:id/post/:p_id", function(req, res) {
 	var p_id = parseInt(req.params.p_id);
 	db.get("SELECT * FROM backpackers WHERE id ="+b_id+";", function(err, rows){
 		db.get("SELECT * FROM posts WHERE p_id = "+p_id+";", function(err, rows2) {
-			res.render("show_post.ejs", {backpacker : rows, post : rows2});
+			db.all("SELECT * FROM comments WHERE p_id ="+p_id+";" function(err, rows3) {
+				res.render("show_post.ejs", {backpacker : rows, post : rows2, comments: rows3});
+			});
 		});
 	});
 });
@@ -120,6 +134,32 @@ app.put("/backpacker/:id", function(req, res) {
 		} else {
 			res.redirect("/backpackers");
 		}
+	});
+});
+
+// each post's edit form
+app.get("/backpacker/:id/post/:p_id/edit", function(req, res) {
+	var b_id = parseInt(req.params.id);
+	var p_id = parseInt(req.params.p_id);
+	db.get("SELECT * FROM backpackers WHERE id ="+b_id+";", function(err, rows){
+		db.get("SELECT * FROM posts WHERE p_id = "+p_id+";", function(err, rows2) {
+			res.render("edit_post.ejs", {backpacker : rows, post : rows2});
+		});
+	});
+});
+
+// editing a post 
+app.put("/backpacker/:id/post/:p_id", function(req, res) {
+	var b_id = parseInt(req.params.id);
+	var p_id = parseInt(req.params.p_id);
+	db.get("SELECT * FROM backpackers WHERE id="+b_id+";", function(err, rows) {
+		db.run("UPDATE posts SET p_title=?, p_image=?, p_body=?, b_id=? WHERE p_id="+p_id+";", req.body.title, req.body.p_image, req.body.p_body, b_id, function(err) {
+			if (err) {
+				throw err;
+			} else {
+				res.redirect("/backpacker/"+b_id+"/posts");
+			}
+		});
 	});
 });
 
