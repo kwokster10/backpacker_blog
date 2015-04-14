@@ -4,4 +4,4 @@
 
 ### Think of it as an instant blog. Take a picture, write a comment and show your friends all the great places you've been. 
 
-### Click on the features.md to read on how to use the app.
+### Click on the features.md to read up on how to use the app.

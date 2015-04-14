@@ -44,7 +44,10 @@
 	</ul>
 	<br>
 	<br>
-	<a href="/backpacker/<%= backpacker.id %>/posts/new"><%= backpacker.name %>? Make a new post!</a>
+	<form action="/backpacker/<%= backpacker.id %>/posts/new" method="GET">
+	<label><%= backpacker.name%>? Enter your password to make a new post!</label><br>
+	<input type="password" name="password_check" placeholder="case-sensitive"> <button>Create a post!</button>
+	</form>
 	<br>
 	<br>
 	<a href="/backpackers">Back to list of globetrotters</a>
@@ -52,3 +55,4 @@
 	<br>
 </body>
 </html>
+
